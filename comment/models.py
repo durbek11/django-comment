@@ -1,16 +1,25 @@
-from django.db import models
-
-
-class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    name = models.CharField(max_length=80)
-    email = models.EmailField()
-    body = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False)
-
-    class Meta:
-        ordering = ['created_on']
+class Product(models.Model):
+    title = models.CharField(max_length=200)
+    price = models.IntegerField(default=1, null=True, blank=True)
+    img = models.ImageField(upload_to="images/")
+    score = models.IntegerField(default=0,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(0),
+        ]
+    )
 
     def __str__(self):
-        return 'Comment {} by {}'.format(self.body, self.name)
+        return str(f"id:{self.pk} score:{self.score} title:{self.title}")
+
+class Comment(models.Model):
+    post = models.ForeignKey(Product,on_delete=models.CASCADE,related_name='comments')
+    authour = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    message = models.CharField(max_length=50)
+    rate_product = models.IntegerField(
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(0)
+        ]
+    )
+    active = models.BooleanField(default=True)
