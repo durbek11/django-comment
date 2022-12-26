@@ -2,4 +2,4 @@ from django.shortcuts import render
 from .models import *
 
 def home(request):
-    return render(request, "templates\home.html")
+    return render(request, "templates\comment.html")
