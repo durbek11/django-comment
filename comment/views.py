@@ -24,3 +24,12 @@ def profile(request):
             user_form.save()
             profile_form.save()
             return redirect("/profile/")
+
+        else:
+            user_form = UpdateUserForm(instance=request.user)
+        profile_form = UpdateProfileForm(instance=request.user.profile)
+    context ={
+        "user_form":user_form,
+        "profile_form":profile_form
+    }
+    return render(request, 'pages/profile.html', context)
